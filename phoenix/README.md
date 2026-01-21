@@ -69,47 +69,47 @@ The ranking model uses a transformer architecture where **candidates cannot atte
 #### Ranking Model Architecture
 
 ```
-                              PHOENIX RANKING MODEL
-    ┌────────────────────────────────────────────────────────────────────────────┐
-    │                                                                            │
-    │                              OUTPUT LOGITS                                 │
-    │                        [B, num_candidates, num_actions]                    │
-    │                                    │                                       │
-    │                                    │ Unembedding                           │
-    │                                    │ Projection                            │
-    │                                    │                                       │
-    │                    ┌───────────────┴───────────────┐                       │
-    │                    │                               │                       │
-    │                    │    Extract Candidate Outputs  │                       │
-    │                    │    (positions after history)  │                       │
-    │                    │                               │                       │
-    │                    └───────────────┬───────────────┘                       │
-    │                                    │                                       │
-    │                    ┌───────────────┴───────────────┐                       │
-    │                    │                               │                       │
-    │                    │         Transformer           │                       │
-    │                    │     (with special masking)    │                       │
-    │                    │                               │                       │
-    │                    │   Candidates CANNOT attend    │                       │
-    │                    │   to each other               │                       │
-    │                    │                               │                       │
-    │                    └───────────────┬───────────────┘                       │
-    │                                    │                                       │
-    │    ┌───────────────────────────────┼───────────────────────────────┐       │
-    │    │                               │                               │       │
-    │    ▼                               ▼                               ▼       │
-    │ ┌──────────┐              ┌─────────────────┐              ┌────────────┐  │
-    │ │   User   │              │     History     │              │ Candidates │  │
-    │ │Embedding │              │   Embeddings    │              │ Embeddings │  │
-    │ │  [B, 1]  │              │    [B, S, D]    │              │  [B, C, D] │  │
-    │ │          │              │                 │              │            │  │
-    │ │ User     │              │ Posts + Authors │              │ Posts +    │  │
-    │ │ Hashes   │              │ + Actions +     │              │ Authors +  │  │
-    │ │          │              │ Product Surface │              │ Product    │  │
-    │ └──────────┘              └─────────────────┘              │ Surface    │  │
-    │                                                            └────────────┘  │
-    │                                                                            │
-    └────────────────────────────────────────────────────────────────────────────┘
+                              PHOENIX RANKING MODEL                                  
+    ┌────────────────────────────────────────────────────────────────────────────┐   
+    │                                                                            │   
+    │                              OUTPUT LOGITS                                 │   
+    │                        [B, num_candidates, num_actions]                    │   
+    │                                    │                                       │   
+    │                                    │ Unembedding                           │   
+    │                                    │ Projection                            │   
+    │                                    │                                       │   
+    │                    ┌───────────────┴───────────────┐                       │   
+    │                    │                               │                       │   
+    │                    │    Extract Candidate Outputs  │                       │   
+    │                    │    (positions after history)  │                       │   
+    │                    │                               │                       │   
+    │                    └───────────────┬───────────────┘                       │   
+    │                                    │                                       │   
+    │                    ┌───────────────┴───────────────┐                       │   
+    │                    │                               │                       │   
+    │                    │         Transformer           │                       │   
+    │                    │     (with special masking)    │                       │   
+    │                    │                               │                       │   
+    │                    │   Candidates CANNOT attend    │                       │   
+    │                    │   to each other               │                       │   
+    │                    │                               │                       │   
+    │                    └───────────────┬───────────────┘                       │   
+    │                                    │                                       │   
+    │       ┌────────────────────────────┼───────────────────────────────┐       │   
+    │       │                            │                               │       │   
+    │       ▼                            ▼                               ▼       │   
+    │ ┌─────────────┐           ┌─────────────────┐              ┌────────────┐  │   
+    │ │     User    │           │     History     │              │ Candidates │  │   
+    │ │  Embedding  │           │   Embeddings    │              │ Embeddings │  │   
+    │ │  [B, 1, D]  │           │    [B, S, D]    │              │  [B, C, D] │  │   
+    │ │             │           │                 │              │            │  │   
+    │ │ User Hashs  │           │ Posts + Authors │              │ Posts +    │  │   
+    │ │             │           │ + Actions +     │              │ Authors +  │  │   
+    │ │             │           │ Product Surface │              │ Product    │  │   
+    │ └─────────────┘           └─────────────────┘              │ Surface    │  │   
+    │                                                            └────────────┘  │   
+    │                                                                            │   
+    └────────────────────────────────────────────────────────────────────────────┘   
 ```
 
 #### Attention Mask: Candidate Isolation
